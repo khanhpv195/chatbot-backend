@@ -22,6 +22,7 @@ export const getChatbotResponse = async (message: string): Promise<string> => {
     return response.data.choices[0].message.content;
   } catch (error) {
     // Logging the error if the request fails
+    console.error("process.env.OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
     console.error("Error calling chatbot API:", error);
     // Throwing a new error to handle the failure
     throw new Error("Failed to get response from chatbot");
