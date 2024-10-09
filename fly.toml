@@ -4,7 +4,7 @@
 #
 
 app = 'chatbot-backend-bold-lake-8598'
-primary_region = 'hkg'
+primary_region = 'iad'
 
 [build]
 

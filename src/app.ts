@@ -4,7 +4,10 @@ import cors from "cors";
 import chatRoutes from "./routes/chatRoutes";
 
 dotenv.config();
-
+if (!process.env.OPENAI_API_KEY || !process.env.OPENAI_BASE_URL) {
+  console.error("Missing required environment variables");
+  process.exit(1);
+}
 const app = express();
 
 app.use(

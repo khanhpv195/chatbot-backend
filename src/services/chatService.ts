@@ -2,29 +2,35 @@ import axios from "axios";
 
 // Function to get a response from the chatbot based on the user's message
 export const getChatbotResponse = async (message: string): Promise<string> => {
+  console.log("OPENAI_BASE_URL:", process.env.OPENAI_BASE_URL);
+  console.log(
+    "OPENAI_API_KEY:",
+    process.env.OPENAI_API_KEY ? "Set" : "Not set"
+  );
+
   try {
-    // Sending a POST request to the OpenAI API to get a chatbot response
     const response = await axios.post(
       `${process.env.OPENAI_BASE_URL}/v1/chat/completions`,
       {
-        model: "gpt-3.5-turbo", // Model used for generating the response
-        messages: [{ role: "user", content: message }], // User's message
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: message }],
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, // API key for authentication
-          "Content-Type": "application/json", // Content type of the request
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    // Returning the content of the first choice from the response
     return response.data.choices[0].message.content;
   } catch (error) {
-    // Logging the error if the request fails
-    console.error("process.env.OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
-    console.error("Error calling chatbot API:", error);
-    // Throwing a new error to handle the failure
+    console.error("Full error object:", JSON.stringify(error, null, 2));
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    }
     throw new Error("Failed to get response from chatbot");
   }
 };
